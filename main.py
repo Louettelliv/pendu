@@ -102,19 +102,19 @@ Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut
             letter = request_letter()
             if letter in word:
                 letters_found.append(letter)
-                print("Bonne lettre!")
+                print("Bonne lettre!\n")
                 if word == word_current_state(word, letters_found).replace(" ",""):
-                    print(f"Félicitations! Vous avez trouvé le mot: {word}")
+                    print(f"Félicitations! Vous avez trouvé le mot: {word}.\n")
                     break
             else:
                 if letter not in bad_letters:
                     bad_letters.append(letter)
                     remaining_attempts -= 1
                     already_try=0
-                    print("Mauvaise lettre!")
+                    print("Mauvaise lettre!\n")
                 else:
                     already_try=1
-                    print("Vous avez déjà essayé cette lettre.")
+                    print("Vous avez déjà essayé cette lettre.\n")
 
         if remaining_attempts == 0:
             print(f"Désolé, vous avez perdu! Le mot était: {word}")
