@@ -55,14 +55,15 @@ def request_letter():
     return remove_accents(letter)
 
 
-def play_hangman():
+def play_hangman(change_file=True):
     print("Bienvenue au jeu du Pendu!")
 
     while True:
-        complete_path_file = input('Entrez le chemin complet du fichier contenant les mots.\n\
+        if(change_file == True):
+            complete_path_file = input('Entrez le chemin complet du fichier contenant les mots.\n\
 Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut.\n')
-        if not complete_path_file:
-            complete_path_file = 'mots_pendu.txt'
+            if not complete_path_file:
+                complete_path_file = 'mots_pendu.txt'
 
         word = select_random_word(complete_path_file)
         if not word:
@@ -80,6 +81,18 @@ Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut
             print(f"Mot à deviner : {word_current_state(word, letters_found)}")
             print(f"Lettres ratées: {', '.join(bad_letters)}")
             print(f"Chances restantes: {remaining_attempts}")
+            if remaining_attempts == 1:
+                alphabet = 'a b c d e f g h i j k l m n o p q r s t u v w x y z'.split()
+                alphabet_size = len(alphabet)
+                j = 0
+                for i in range(alphabet_size):
+                    if alphabet[j] in word:
+                        alphabet.pop(j)
+                    elif alphabet[j] in bad_letters:
+                        alphabet.pop(j)
+                    else:
+                        j += 1
+                print(f"Indice: une lettre {choice(alphabet)} n'est pas dans le mot.\n ")
 
             letter = request_letter()
             if letter in word:
@@ -93,18 +106,6 @@ Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut
                     bad_letters.append(letter)
                     remaining_attempts -= 1
                     print("Mauvaise lettre!")
-                    if remaining_attempts == 1:
-                        alphabet = 'a b c d e f g h i j k l m n o p q r s t u v w x y z'.split()
-                        alphabet_size=len(alphabet)
-                        j = 0
-                        for i in range(alphabet_size):
-                            if alphabet[j] in word:
-                                alphabet.pop(j)
-                            elif alphabet[j] in bad_letters:
-                                alphabet.pop(j)
-                            else:
-                                j += 1
-                        print(f"Indice: une lettre {choice(alphabet)} n'est pas dans le mot.\n ")
                 else:
                     print("Vous avez déjà essayé cette lettre.")
 
@@ -114,6 +115,9 @@ Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut
         replay = input("Voulez-vous rejouer ? (o/n): ").strip().lower()
         if replay != 'o':
             break
+        else:
+            change_file = bool(int(input("Voulez-vous tirer un mot dans un autre fichier ? (oui: 1/non: 0) : ")))
+
 
 
 
