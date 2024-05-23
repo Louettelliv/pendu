@@ -33,7 +33,6 @@ def select_random_word(complete_path_file="mots_pendu.txt"):
         print("Fichier non trouvé. Vérifiez le chemin complet du fichier.")
 
 
-
 def remove_accents(word):
     """
     Supprime les accents d'un mot donné.
@@ -53,6 +52,7 @@ def request_letter():
     letter = input("Entrez une lettre : ").strip().lower()
     return remove_accents(letter)
 
+
 def print_hint(word, bad_letters):
     alphabet = 'a b c d e f g h i j k l m n o p q r s t u v w x y z'.split()
     alphabet_size = len(alphabet)
@@ -68,11 +68,14 @@ def print_hint(word, bad_letters):
     bad_letters.append(hint)
     print(f"Indice: la lettre {hint} n'est pas dans le mot.\n ")
 
+
 def play_hangman(change_file=True):
     print("Bienvenue au jeu du Pendu!")
 
+    complete_path_file = ""
+
     while True:
-        if(change_file == True):
+        if change_file:
             complete_path_file = input('Entrez le chemin complet du fichier contenant les mots.\n\
 Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut.\n')
             if not complete_path_file:
@@ -91,7 +94,7 @@ Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut
         letters_found = []
         bad_letters = []
 
-        already_try=0
+        already_try = 0
 
         while remaining_attempts > 0:
 
@@ -105,17 +108,17 @@ Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut
             if letter in word:
                 letters_found.append(letter)
                 print("Bonne lettre!\n")
-                if word == word_current_state(word, letters_found).replace(" ",""):
+                if word == word_current_state(word, letters_found).replace(" ", ""):
                     print(f"Félicitations! Vous avez trouvé le mot: {word}.\n")
                     break
             else:
                 if letter not in bad_letters:
                     bad_letters.append(letter)
                     remaining_attempts -= 1
-                    already_try=0
+                    already_try = 0
                     print("Mauvaise lettre!\n")
                 else:
-                    already_try=1
+                    already_try = 1
                     print("Vous avez déjà essayé cette lettre.\n")
 
         if remaining_attempts == 0:
@@ -126,9 +129,6 @@ Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut
             break
         else:
             change_file = bool(int(input("Voulez-vous tirer un mot dans un autre fichier ? (oui: 1/non: 0) : ")))
-
-
-
 
 
 if __name__ == "__main__":
