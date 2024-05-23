@@ -8,6 +8,8 @@ Date: 23/05/2024
 """
 
 from random import choice
+from unicodedata import normalize
+
 
 def select_random_word(complete_path_file="mots_pendu.txt"):
     """
@@ -31,3 +33,14 @@ def select_random_word(complete_path_file="mots_pendu.txt"):
         print("Fichier non trouvé. Vérifiez le chemin complet du fichier.")
         # Renvoie une liste vide pour indiquer qu'aucun mot n'a été trouvé
         return []
+
+
+def remove_accents(word):
+    """
+    Supprime les accents d'un mot donné.
+    Paramètres:
+        word (str): Le mot dont les accents doivent être supprimés.
+    Retours:
+        str: Le mot sans accents.
+    """
+    return normalize('NFD', word).encode('ASCII', 'ignore').decode('utf8')
