@@ -91,6 +91,8 @@ Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut
         letters_found = []
         bad_letters = []
 
+        already_try=0
+
         while remaining_attempts > 0:
 
             print(f"Mot à deviner : {word_current_state(word, letters_found)}")
