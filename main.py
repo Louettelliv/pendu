@@ -11,6 +11,9 @@ from random import choice
 from unicodedata import normalize
 
 
+MAX_ATTEMPS = 6
+
+
 def request_file_path():
     complete_file_path = input('Entrez le chemin complet du fichier contenant les mots.\n\
 Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut.\n')
@@ -79,7 +82,7 @@ def print_hint(word, bad_letters):
 
 def play_single_game(word):
     word = remove_accents(word)
-    remaining_attempts = 6
+    remaining_attempts = MAX_ATTEMPS
     letters_found = []
     bad_letters = []
 
