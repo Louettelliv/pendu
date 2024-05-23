@@ -11,11 +11,19 @@ from random import choice
 from unicodedata import normalize
 
 
-def select_random_word(complete_path_file="mots_pendu.txt"):
+def request_file_path():
+    complete_file_path = input('Entrez le chemin complet du fichier contenant les mots.\n\
+Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut.\n')
+    if not complete_file_path:
+        complete_file_path = 'mots_pendu.txt'
+    return complete_file_path
+
+
+def select_random_word(complete_file_path="mots_pendu.txt"):
     """
         Sélectionne un mot aléatoire à partir d'un fichier texte contenant une liste de mots.
         Paramètres:
-            complete_path_file (str): Chemin complet vers le fichier contenant les mots.
+            complete_file_path (str): Chemin complet vers le fichier contenant les mots.
                                       Par défaut, "mots_pendu.txt".
         Retours:
             str: Un mot choisi aléatoirement dans le fichier.
@@ -23,7 +31,7 @@ def select_random_word(complete_path_file="mots_pendu.txt"):
         """
     try:
         # Tente d'ouvrir le fichier spécifié en mode lecture avec encodage UTF-8
-        with open(complete_path_file, 'r', encoding='utf8') as f:
+        with open(complete_file_path, 'r', encoding='utf8') as f:
             # Lit toutes les lignes du fichier et les stocke dans une liste
             words = f.read().splitlines()
         # Renvoie un mot choisi aléatoirement dans la liste des mots
@@ -69,66 +77,69 @@ def print_hint(word, bad_letters):
     print(f"Indice: la lettre {hint} n'est pas dans le mot.\n ")
 
 
+def play_single_game(word):
+    word = remove_accents(word)
+    remaining_attempts = 6
+    letters_found = []
+    bad_letters = []
+
+    already_try = 0
+
+    while remaining_attempts > 0:
+
+        print(f"Mot à deviner : {word_current_state(word, letters_found)}")
+        print(f"Lettres ratées: {', '.join(bad_letters)}")
+        print(f"Chances restantes: {remaining_attempts}")
+        if remaining_attempts == 1 and already_try == 0:
+            print_hint(word, bad_letters)
+
+        letter = request_letter()
+        if letter in word:
+            letters_found.append(letter)
+            print("Bonne lettre!\n")
+            if word == word_current_state(word, letters_found).replace(" ", ""):
+                print(f"Félicitations! Vous avez trouvé le mot: {word}.\n")
+                break
+        else:
+            if letter not in bad_letters:
+                bad_letters.append(letter)
+                remaining_attempts -= 1
+                already_try = 0
+                print("Mauvaise lettre!\n")
+            else:
+                already_try = 1
+                print("Vous avez déjà essayé cette lettre.\n")
+
+    if remaining_attempts == 0:
+        print(f"Désolé, vous avez perdu! Le mot était: {word}")
+
+
 def play_hangman(change_file=True):
     print("Bienvenue au jeu du Pendu!")
 
-    complete_path_file = ""
+    complete_file_path = ""
 
     while True:
         if change_file:
-            complete_path_file = input('Entrez le chemin complet du fichier contenant les mots.\n\
-Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut.\n')
-            if not complete_path_file:
-                complete_path_file = 'mots_pendu.txt'
+            complete_file_path = request_file_path()
 
-        word = select_random_word(complete_path_file)
+        word = select_random_word(complete_file_path)
         if not word:
             retry = input("Voulez-vous réessayer ? (o/n): ")
+            print("\n")
             if retry == 'n':
                 break
             else:
                 continue
 
-        word = remove_accents(word)
-        remaining_attempts = 6
-        letters_found = []
-        bad_letters = []
-
-        already_try = 0
-
-        while remaining_attempts > 0:
-
-            print(f"Mot à deviner : {word_current_state(word, letters_found)}")
-            print(f"Lettres ratées: {', '.join(bad_letters)}")
-            print(f"Chances restantes: {remaining_attempts}")
-            if remaining_attempts == 1 and already_try == 0:
-                print_hint(word, bad_letters)
-
-            letter = request_letter()
-            if letter in word:
-                letters_found.append(letter)
-                print("Bonne lettre!\n")
-                if word == word_current_state(word, letters_found).replace(" ", ""):
-                    print(f"Félicitations! Vous avez trouvé le mot: {word}.\n")
-                    break
-            else:
-                if letter not in bad_letters:
-                    bad_letters.append(letter)
-                    remaining_attempts -= 1
-                    already_try = 0
-                    print("Mauvaise lettre!\n")
-                else:
-                    already_try = 1
-                    print("Vous avez déjà essayé cette lettre.\n")
-
-        if remaining_attempts == 0:
-            print(f"Désolé, vous avez perdu! Le mot était: {word}")
+        play_single_game(word)
 
         replay = input("Voulez-vous rejouer ? (o/n): ").strip().lower()
-        if replay != 'o':
-            break
-        else:
+        if replay == 'o':
             change_file = bool(int(input("Voulez-vous tirer un mot dans un autre fichier ? (oui: 1/non: 0) : ")))
+            print("\n")
+        else:
+            break
 
 
 if __name__ == "__main__":
