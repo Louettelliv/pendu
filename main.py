@@ -54,6 +54,20 @@ def request_letter():
     letter = input("Entrez une lettre : ").strip().lower()
     return remove_accents(letter)
 
+def print_hint(word, bad_letters):
+    alphabet = 'a b c d e f g h i j k l m n o p q r s t u v w x y z'.split()
+    alphabet_size = len(alphabet)
+    j = 0
+    for i in range(alphabet_size):
+        if alphabet[j] in word:
+            alphabet.pop(j)
+        elif alphabet[j] in bad_letters:
+            alphabet.pop(j)
+        else:
+            j += 1
+    hint=choice(alphabet)
+    bad_letters.append(hint)
+    print(f"Indice: la lettre {hint} n'est pas dans le mot.\n ")
 
 def play_hangman(change_file=True):
     print("Bienvenue au jeu du Pendu!")
@@ -81,18 +95,8 @@ Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut
             print(f"Mot à deviner : {word_current_state(word, letters_found)}")
             print(f"Lettres ratées: {', '.join(bad_letters)}")
             print(f"Chances restantes: {remaining_attempts}")
-            if remaining_attempts == 1:
-                alphabet = 'a b c d e f g h i j k l m n o p q r s t u v w x y z'.split()
-                alphabet_size = len(alphabet)
-                j = 0
-                for i in range(alphabet_size):
-                    if alphabet[j] in word:
-                        alphabet.pop(j)
-                    elif alphabet[j] in bad_letters:
-                        alphabet.pop(j)
-                    else:
-                        j += 1
-                print(f"Indice: une lettre {choice(alphabet)} n'est pas dans le mot.\n ")
+            if remaining_attempts == 1 and already_try == 0:
+                print_hint(word, bad_letters)
 
             letter = request_letter()
             if letter in word:
@@ -105,8 +109,10 @@ Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut
                 if letter not in bad_letters:
                     bad_letters.append(letter)
                     remaining_attempts -= 1
+                    already_try=0
                     print("Mauvaise lettre!")
                 else:
+                    already_try=1
                     print("Vous avez déjà essayé cette lettre.")
 
         if remaining_attempts == 0:
