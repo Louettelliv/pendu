@@ -6,3 +6,14 @@ Description: Ce script contient une implémentation du jeu du pendu en Python.
 Auteur: Lou-Anne Villette
 Date: 23/05/2024
 """
+
+from random import choice
+
+def select_random_word(complete_path_file="mots_pendu.txt"):
+    try:
+        with open(complete_path_file, 'r', encoding='utf8') as f:
+            words = f.read().splitlines()
+        return choice(words)
+    except FileNotFoundError:
+        print("Fichier non trouvé. Vérifiez le chemin complet du fichier.")
+        return []
