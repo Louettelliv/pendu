@@ -2,6 +2,7 @@
 ## Contenu du répertoire
 - Script Python "main.py" implémentant le jeu du pendu
 - Fichier texte "mots_pendu.txt" contenant une liste de mots
+- Fichier .gitignore pour ignorer les dossiers .venv et .idea dans le repository Git
 - Fichier README.md
 
 ## Description
