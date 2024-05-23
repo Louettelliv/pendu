@@ -11,7 +11,6 @@ from random import choice
 from unicodedata import normalize
 
 
-
 def select_random_word(complete_path_file="mots_pendu.txt"):
     """
         Sélectionne un mot aléatoire à partir d'un fichier texte contenant une liste de mots.
@@ -65,7 +64,7 @@ def print_hint(word, bad_letters):
             alphabet.pop(j)
         else:
             j += 1
-    hint=choice(alphabet)
+    hint = choice(alphabet)
     bad_letters.append(hint)
     print(f"Indice: la lettre {hint} n'est pas dans le mot.\n ")
 
@@ -84,6 +83,8 @@ Appuyez directement sur la touche "entrée" pour utiliser le fichier par défaut
             retry = input("Voulez-vous réessayer ? (o/n): ")
             if retry == 'n':
                 break
+            else:
+                continue
 
         word = remove_accents(word)
         remaining_attempts = 6
